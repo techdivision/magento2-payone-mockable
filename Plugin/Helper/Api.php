@@ -9,6 +9,7 @@
 
 namespace TechDivision\PayoneMockable\Plugin\Helper;
 
+use Magento\Framework\App\Config\ScopeConfigInterface;
 use Payone\Core\Helper\Api as PayoneApi;
 
 /**
@@ -22,15 +23,29 @@ use Payone\Core\Helper\Api as PayoneApi;
 class Api
 {
     /**
+     * @var ScopeConfigInterface
+     */
+    private $scopeConfig;
+
+    /**
+     * @param ScopeConfigInterface $scopeConfig
+     */
+    public function __construct(
+        ScopeConfigInterface $scopeConfig
+    ) {
+        $this->scopeConfig = $scopeConfig;
+    }
+
+    /**
      * @param PayoneApi $subject
+     * @param callable $proceed
      * @param array $aParameters
      * @param string $sApiUrl
      * @return string
      */
-    public function beforeGetRequestUrl(PayoneApi $subject, $aParameters, $sApiUrl)
+    public function aroundGetRequestUrl(PayoneApi $subject, callable $proceed, $aParameters, $sApiUrl)
     {
-        // $sApiUrl = 'https://api.pay1.de/post-gateway/';
-        $sApiUrl = 'https://psp-mock.test/payone/post-gateway';
-        return $subject->getRequestUrl($aParameters, $sApiUrl);
+        $sApiUrl = $this->scopeConfig->getValue('techdivision_payone_mockable/payone/post_gateway');
+        return $proceed($aParameters, $sApiUrl);
     }
 }

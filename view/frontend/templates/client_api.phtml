@@ -7,6 +7,9 @@
  * http://opensource.org/licenses/osl-3.0.php
  */
 
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\App\ObjectManager;
+
 /**
  * @category   TechDivision
  * @package    PayoneMockable
@@ -14,16 +17,18 @@
  * @link       http://www.techdivision.com/
  * @author     Vadim Justus <v.justus@techdivision.com
  */
+
+$objectManager = ObjectManager::getInstance();
+
+/** @var ScopeConfigInterface $scopeConfig */
+$scopeConfig = $objectManager->get(ScopeConfigInterface::class);
+
+/** @var \Payone\Core\Block\ClientApi $block */
+$clientApiUrl = $scopeConfig->getValue('techdivision_payone_mockable/payone/client_api');
+
 ?>
 
-<script type="text/javascript" src="https://psp-mock.test/payone/client-api/js/ajax.js"></script>
-<script type="text/javascript" src="https://psp-mock.test/payone/client-api/js/v1/payone_hosted_min.js"></script>
+<script type="text/javascript" src="<?php echo $clientApiUrl; ?>js/ajax.js"></script>
+<script type="text/javascript" src="<?php echo $clientApiUrl; ?>js/v1/payone_hosted_min.js"></script>
 <script type="text/javascript" src="https://cdn.klarna.com/public/kitt/core/v1.0/js/klarna.min.js"></script>
 <script type="text/javascript" src="https://cdn.klarna.com/public/kitt/toc/v1.1/js/klarna.terms.min.js"></script>
-
-<!--
-<script type="text/javascript" src="https://psp-mock.test/payone/client-api/js/ajax.js"></script>
-<script type="text/javascript" src="https://psp-mock.test/payone/client-api/js/v1/payone_hosted_min.js"></script>
-<script type="text/javascript" src="https://psp-mock.test/klarna/public/kitt/core/v1.0/js/klarna.min.js"></script>
-<script type="text/javascript" src="https://psp-mock.test/klarna/public/kitt/toc/v1.1/js/klarna.terms.min.js"></script>
--->
